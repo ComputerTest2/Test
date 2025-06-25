@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Booking - Rolling Fade</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f1e8;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        .header {
+            background-color: #556b53;
+            color: white;
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #f5f1e8;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .logo-text h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        /* Container */
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+            margin-top: 40px;
+        }
+
+        .section-header h2 {
+            font-size: 32px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .section-header p {
+            color: #666;
+            font-size: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Search Box */
+        .search-box {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        .search-box h3 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: #556b53;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #445342;
+        }
+
+        .btn-secondary {
+            background-color: #a8b5a3;
+            color: white;
+            width: 100%;
+        }
+
+        .btn-secondary:hover {
+            background-color: #8f9d8a;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: #556b53;
+            border: 2px solid #556b53;
+        }
+
+        .btn-outline:hover {
+            background-color: #556b53;
+            color: white;
+        }
+
+        /* Tab Buttons */
+        .tab-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .tab-buttons .btn {
+            flex: 1;
+        }
+
+        .tab-buttons .btn.active {
+            background-color: #556b53;
+            color: white;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #556b53;
+        }
+
+        /* Booking Results */
+        .booking-result {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .booking-result h3 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .booking-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .booking-item:last-child {
+            border-bottom: none;
+        }
+
+        .booking-label {
+            color: #666;
+        }
+
+        .booking-value {
+            font-weight: 500;
+            color: #333;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-confirmed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-cancelled {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .action-buttons .btn {
+            flex: 1;
+        }
+
+        /* No Results */
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .no-results-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">✂️</div>
+                <div class="logo-text">
+                    <h1>Rolling Fade</h1>
+                    <p>Keep Sharpening, Keep Rolling</p>
+                </div>
+            </div>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="services.html">Book Now</a>
+                <a href="view-booking.html">View Booking</a>
+                <a href="admin.html">Admin</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="section-header">
+            <h2>Find Your Booking</h2>
+            <p>Look up your appointment using your phone number or confirmation code.</p>
+        </div>
+        
+        <div class="search-box">
+            <h3>Search for Your Appointment</h3>
+            
+            <div class="tab-buttons">
+                <button class="btn btn-primary active" onclick="setSearchMethod('phone')">Search by Phone</button>
+                <button class="btn btn-outline" onclick="setSearchMethod('code')">Search by Code</button>
+            </div>
+            
+            <div class="form-group">
+                <label id="searchLabel">Phone Number</label>
+                <input type="text" id="searchInput" placeholder="Enter your phone number">
+            </div>
+            
+            <button class="btn btn-secondary" onclick="findBooking()">Find Booking</button>
+        </div>
+        
+        <div id="bookingResults"></div>
+        
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="services.html" class="btn btn-primary">Book New Appointment</a>
+        </div>
+    </div>
+
+    <script>
+        // Service data
+        const services = {
+            1: { name: 'Haircut', price: 25, duration: 30 },
+            2: { name: 'Haircut + Beard', price: 40, duration: 60 },
+            3: { name: 'Beard Trim', price: 20, duration: 20 },
+            4: { name: 'Hot Towel Shave', price: 30, duration: 30 },
+            5: { name: 'Hair Wash & Style', price: 15, duration: 20 },
+            6: { name: 'Black Mask Facial', price: 25, duration: 25 },
+            7: { name: 'Deluxe Package', price: 60, duration: 90 },
+            8: { name: 'VIP Package', price: 100, duration: 120 }
+        };
+
+        let searchMethod = 'phone';
+
+        function setSearchMethod(method) {
+            searchMethod = method;
+            
+            // Update active button
+            document.querySelectorAll('.tab-buttons .btn').forEach(btn => {
+                btn.classList.remove('active', 'btn-primary', 'btn-outline');
+                if (btn.textContent.toLowerCase().includes(method)) {
+                    btn.classList.add('active', 'btn-primary');
+                } else {
+                    btn.classList.add('btn-outline');
+                }
+            });
+            
+            // Update form
+            document.getElementById('searchLabel').textContent = method === 'phone' ? 'Phone Number' : 'Confirmation Code';
+            document.getElementById('searchInput').placeholder = method === 'phone' ? 'Enter your phone number' : 'Enter confirmation code';
+            document.getElementById('searchInput').value = '';
+        }
+
+        function findBooking() {
+            const searchValue = document.getElementById('searchInput').value.trim();
+            if (!searchValue) {
+                alert('Please enter a search value');
+                return;
+            }
+            
+            // Get bookings from localStorage
+            const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+            
+            // Find matching booking
+            let foundBooking = null;
+            if (searchMethod === 'phone') {
+                foundBooking = bookings.find(b => b.phone === searchValue);
+            } else {
+                foundBooking = bookings.find(b => b.confirmationCode === searchValue);
+            }
+            
+            const resultsContainer = document.getElementById('bookingResults');
+            
+            if (foundBooking) {
+                // Calculate service details
+                let serviceNames = [];
+                let totalPrice = 0;
+                
+                foundBooking.services.forEach(id => {
+                    const service = services[id];
+                    serviceNames.push(service.name);
+                    totalPrice += service.price;
+                });
+                
+                resultsContainer.innerHTML = `
+                    <div class="booking-result">
+                        <h3>Your Upcoming Appointment</h3>
+                        <div class="booking-item">
+                            <span class="booking-label">Booking ID</span>
+                            <span class="booking-value">${foundBooking.confirmationCode}</span>
+                        </div>
+                        <div class="booking-item">
+                            <span class="booking-label">Customer Name</span>
+                            <span class="booking-value">${foundBooking.name}</span>
+                        </div>
+                        <div class="booking-item">
+                            <span class="booking-label">Services</span>
+                            <span class="booking-value">${serviceNames.join(', ')}</span>
+                        </div>
+                        <div class="booking-item">
+                            <span class="booking-label">Date & Time</span>
+                            <span class="booking-value">${new Date(foundBooking.date).toLocaleDateString('en-US', { 
+                                weekday: 'long', 
+                                year: 'numeric', 
+                                month: 'long', 
+                                day: 'numeric' 
+                            })} at ${foundBooking.time}</span>
+                        </div>
+                        <div class="booking-item">
+                            <span class="booking-label">Total</span>
+                            <span class="booking-value" style="font-weight: bold; color: #556b53;">${totalPrice}</span>
+                        </div>
+                        <div class="booking-item">
+                            <span class="booking-label">Status</span>
+                            <span class="status-badge status-${foundBooking.status}">${foundBooking.status.charAt(0).toUpperCase() + foundBooking.status.slice(1)}</span>
+                        </div>
+                        ${foundBooking.status === 'confirmed' ? `
+                        <div class="action-buttons">
+                            <button class="btn btn-outline" onclick="cancelBooking('${foundBooking.confirmationCode}')">Cancel Booking</button>
+                            <button class="btn btn-primary" onclick="rescheduleBooking()">Reschedule</button>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+            } else {
+                resultsContainer.innerHTML = `
+                    <div class="no-results">
+                        <div class="no-results-icon">🔍</div>
+                        <h3>No Booking Found</h3>
+                        <p>We couldn't find any bookings matching your search.</p>
+                        <p>Please check your ${searchMethod === 'phone' ? 'phone number' : 'confirmation code'} and try again.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function cancelBooking(confirmationCode) {
+            // Check 24-hour policy
+            const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+            const booking = bookings.find(b => b.confirmationCode === confirmationCode);
+            
+            if (booking) {
+                const bookingDateTime = new Date(booking.date + ' ' + booking.time);
+                const now = new Date();
+                const hoursUntilBooking = (bookingDateTime - now) / (1000 * 60 * 60);
+                
+                if (hoursUntilBooking < 24) {
+                    alert('Sorry, bookings cannot be cancelled within 24 hours of the appointment time.');
+                    return;
+                }
+                
+                if (confirm('Are you sure you want to cancel this booking?')) {
+                    // Update booking status
+                    booking.status = 'cancelled';
+                    localStorage.setItem('bookings', JSON.stringify(bookings));
+                    
+                    alert('Booking cancelled successfully');
+                    findBooking(); // Refresh the display
+                }
+            }
+        }
+
+        function rescheduleBooking() {
+            alert('To reschedule your appointment, please call us at (555) 123-4567 or book a new appointment.');
+        }
+    </script>
+</body>
+</html>

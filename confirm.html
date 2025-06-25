@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Booking - Rolling Fade</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f1e8;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        .header {
+            background-color: #556b53;
+            color: white;
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #f5f1e8;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .logo-text h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        /* Container */
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: #556b53;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #445342;
+        }
+
+        .btn-secondary {
+            background-color: #a8b5a3;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #8f9d8a;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: #556b53;
+            border: 2px solid #556b53;
+        }
+
+        .btn-outline:hover {
+            background-color: #556b53;
+            color: white;
+        }
+
+        /* Booking Summary */
+        .booking-summary {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .booking-summary h3 {
+            margin-bottom: 20px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            color: #666;
+        }
+
+        .summary-value {
+            font-weight: 500;
+            color: #333;
+        }
+
+        /* Form Styles */
+        .form-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .form-section h3 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #556b53;
+        }
+
+        .helper-text {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        /* Info Box */
+        .info-box {
+            background-color: #f0ebe3;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .info-box h4 {
+            margin-bottom: 10px;
+            color: #556b53;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .info-box li {
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .info-box li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #556b53;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .button-group .btn {
+            flex: 1;
+        }
+
+        #selectedLocation {
+            margin-top: 10px;
+            color: #556b53;
+            font-weight: 500;
+        }
+
+        /* Success Message */
+        .success-container {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .success-icon {
+            font-size: 72px;
+            color: #556b53;
+            margin-bottom: 20px;
+        }
+
+        .success-container h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .success-details {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">✂️</div>
+                <div class="logo-text">
+                    <h1>Rolling Fade</h1>
+                    <p>Keep Sharpening, Keep Rolling</p>
+                </div>
+            </div>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="services.html">Book Now</a>
+                <a href="view-booking.html">View Booking</a>
+                <a href="admin.html">Admin</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div id="bookingForm">
+            <a href="datetime.html" class="btn btn-outline">← Back to Date & Time</a>
+            
+            <div class="booking-summary" style="margin-top: 20px;">
+                <h3>👤 Booking Summary</h3>
+                <div class="summary-item">
+                    <span class="summary-label">Service</span>
+                    <span class="summary-value" id="confirmServices">Loading...</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Date</span>
+                    <span class="summary-value" id="confirmDate">Loading...</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Time</span>
+                    <span class="summary-value" id="confirmTime">Loading...</span>
+                </div>
+                <div class="summary-item" style="font-weight: bold;">
+                    <span class="summary-label">Total</span>
+                    <span class="summary-value" id="confirmPrice" style="color: #556b53;">Loading...</span>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h3>Your Information</h3>
+                
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input type="text" id="customerName" placeholder="Enter your full name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Phone Number *</label>
+                    <input type="tel" id="customerPhone" placeholder="(555) 123-4567" required>
+                    <p class="helper-text">We'll use this to send appointment reminders and updates.</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Select Your Location *</label>
+                    <button class="btn btn-outline" onclick="selectLocation()" style="width: 100%;">
+                        📍 Choose Location on Map
+                    </button>
+                    <p id="selectedLocation"></p>
+                </div>
+                
+                <div class="info-box">
+                    <h4>What to expect:</h4>
+                    <ul>
+                        <li>Arrive 5 minutes early for check-in</li>
+                        <li>Complimentary consultation included</li>
+                        <li>Free styling advice and product recommendations</li>
+                        <li>Easy rescheduling if plans change</li>
+                    </ul>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="history.back()">Back to Times</button>
+                    <button class="btn btn-secondary" onclick="confirmBooking()">Confirm Booking</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Message -->
+        <div id="successMessage" class="success-container">
+            <div class="success-icon">✅</div>
+            <h2>Booking Confirmed!</h2>
+            <p>You'll receive an SMS confirmation shortly.</p>
+            
+            <div class="success-details">
+                <h3>Booking Details</h3>
+                <div class="summary-item">
+                    <span>Confirmation Code</span>
+                    <span style="font-weight: bold;" id="confirmationCode"></span>
+                </div>
+                <div class="summary-item">
+                    <span>Services</span>
+                    <span id="successServices"></span>
+                </div>
+                <div class="summary-item">
+                    <span>Date & Time</span>
+                    <span id="successDateTime"></span>
+                </div>
+                <div class="summary-item">
+                    <span>Location</span>
+                    <span id="successLocation"></span>
+                </div>
+                <div class="summary-item">
+                    <span>Total</span>
+                    <span style="font-weight: bold; color: #556b53;" id="successPrice"></span>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <a href="index.html" class="btn btn-outline">Back to Home</a>
+                <a href="view-booking.html" class="btn btn-primary">View My Booking</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Service data
+        const services = {
+            1: { name: 'Haircut', price: 25, duration: 30 },
+            2: { name: 'Haircut + Beard', price: 40, duration: 60 },
+            3: { name: 'Beard Trim', price: 20, duration: 20 },
+            4: { name: 'Hot Towel Shave', price: 30, duration: 30 },
+            5: { name: 'Hair Wash & Style', price: 15, duration: 20 },
+            6: { name: 'Black Mask Facial', price: 25, duration: 25 },
+            7: { name: 'Deluxe Package', price: 60, duration: 90 },
+            8: { name: 'VIP Package', price: 100, duration: 120 }
+        };
+
+        let customerLocation = null;
+
+        // Load booking details
+        window.onload = function() {
+            const selectedIds = JSON.parse(localStorage.getItem('selectedServices') || '[]');
+            const selectedDate = localStorage.getItem('selectedDate');
+            const selectedTime = localStorage.getItem('selectedTime');
+            
+            let serviceNames = [];
+            let totalPrice = 0;
+            
+            selectedIds.forEach(id => {
+                const service = services[id];
+                serviceNames.push(service.name);
+                totalPrice += service.price;
+            });
+            
+            document.getElementById('confirmServices').textContent = serviceNames.join(', ');
+            document.getElementById('confirmDate').textContent = new Date(selectedDate).toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            document.getElementById('confirmTime').textContent = selectedTime + ' (25 min)';
+            document.getElementById('confirmPrice').textContent = '$' + totalPrice;
+        };
+
+        // Select location
+        function selectLocation() {
+            // In real app, this would open Google Maps
+            const lat = 26.3927 + (Math.random() - 0.5) * 0.1;
+            const lng = 50.1418 + (Math.random() - 0.5) * 0.1;
+            customerLocation = { lat, lng };
+            
+            // Simulate getting address from coordinates
+            const address = `${Math.floor(Math.random() * 999) + 1} King Fahd Road, Dammam`;
+            document.getElementById('selectedLocation').textContent = `📍 ${address}`;
+        }
+
+        // Confirm booking
+        function confirmBooking() {
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
+            
+            if (!name) {
+                alert('Please enter your full name');
+                return;
+            }
+            
+            if (!phone) {
+                alert('Please enter your phone number');
+                return;
+            }
+            
+            if (!customerLocation) {
+                alert('Please select your location');
+                return;
+            }
+            
+            // Generate confirmation code
+            const confirmCode = 'RF' + Math.floor(Math.random() * 100000);
+            
+            // Show success message
+            document.getElementById('bookingForm').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'block';
+            
+            // Fill success details
+            document.getElementById('confirmationCode').textContent = confirmCode;
+            document.getElementById('successServices').textContent = document.getElementById('confirmServices').textContent;
+            document.getElementById('successDateTime').textContent = 
+                document.getElementById('confirmDate').textContent + ' at ' + 
+                document.getElementById('confirmTime').textContent;
+            document.getElementById('successLocation').textContent = document.getElementById('selectedLocation').textContent;
+            document.getElementById('successPrice').textContent = document.getElementById('confirmPrice').textContent;
+            
+            // Save booking to localStorage (in real app, this would go to backend)
+            const booking = {
+                confirmationCode: confirmCode,
+                name: name,
+                phone: phone,
+                services: JSON.parse(localStorage.getItem('selectedServices')),
+                date: localStorage.getItem('selectedDate'),
+                time: localStorage.getItem('selectedTime'),
+                location: customerLocation,
+                status: 'confirmed'
+            };
+            
+            // Get existing bookings or create new array
+            let bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+            bookings.push(booking);
+            localStorage.setItem('bookings', JSON.stringify(bookings));
+            
+            // Clear selection data
+            localStorage.removeItem('selectedServices');
+            localStorage.removeItem('selectedDate');
+            localStorage.removeItem('selectedTime');
+        }
+    </script>
+</body>
+</html>
