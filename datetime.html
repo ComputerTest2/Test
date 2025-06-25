@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Date & Time - Rolling Fade</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f1e8;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        .header {
+            background-color: #556b53;
+            color: white;
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #f5f1e8;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .logo-text h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: #556b53;
+            border: 2px solid #556b53;
+        }
+
+        .btn-outline:hover {
+            background-color: #556b53;
+            color: white;
+        }
+
+        /* Booking Summary */
+        .booking-summary {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+            font-weight: bold;
+        }
+
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .section-header h2 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .section-header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        /* Date Input */
+        .date-input-container {
+            max-width: 600px;
+            margin: 0 auto 40px;
+            background: #556b53;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .date-input-container input[type="date"] {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+        }
+
+        .calendar-icon {
+            color: white;
+            font-size: 24px;
+        }
+
+        /* Time Slots */
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .time-slot {
+            background-color: #a8b5a3;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        .time-slot:hover {
+            background-color: #8f9d8a;
+            transform: translateY(-2px);
+        }
+
+        .time-slot.selected {
+            background-color: #556b53;
+        }
+
+        .time-slot.unavailable {
+            background-color: #e0e0e0;
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        .time-slot.unavailable:hover {
+            transform: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .time-slots {
+                grid-template-columns: 1fr;
+            }
+
+            .date-input-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">✂️</div>
+                <div class="logo-text">
+                    <h1>Rolling Fade</h1>
+                    <p>Keep Sharpening, Keep Rolling</p>
+                </div>
+            </div>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="services.html">Book Now</a>
+                <a href="view-booking.html">View Booking</a>
+                <a href="admin.html">Admin</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <a href="services.html" class="btn btn-outline">← Back to Services</a>
+        
+        <div class="booking-summary" style="margin-top: 20px;">
+            <h3>Selected Services</h3>
+            <div id="selectedServicesList">
+                <!-- Services will be loaded here -->
+            </div>
+        </div>
+        
+        <div class="section-header">
+            <h2>📅 Select Date</h2>
+        </div>
+        
+        <div class="date-input-container">
+            <span class="calendar-icon">📅</span>
+            <input type="date" id="appointmentDate" onchange="loadTimeSlots()">
+        </div>
+        
+        <div id="timeSlotSection" style="display: none;">
+            <div class="section-header">
+                <h2>👤 Available Times for Khalid</h2>
+                <p>Master barber with 10+ years experience</p>
+            </div>
+            
+            <div id="availableTimeSlots" class="time-slots">
+                <!-- Time slots will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Service data
+        const services = {
+            1: { name: 'Haircut', price: 25, duration: 30 },
+            2: { name: 'Haircut + Beard', price: 40, duration: 60 },
+            3: { name: 'Beard Trim', price: 20, duration: 20 },
+            4: { name: 'Hot Towel Shave', price: 30, duration: 30 },
+            5: { name: 'Hair Wash & Style', price: 15, duration: 20 },
+            6: { name: 'Black Mask Facial', price: 25, duration: 25 },
+            7: { name: 'Deluxe Package', price: 60, duration: 90 },
+            8: { name: 'VIP Package', price: 100, duration: 120 }
+        };
+
+        // Load selected services
+        function loadSelectedServices() {
+            const selectedIds = JSON.parse(localStorage.getItem('selectedServices') || '[]');
+            const container = document.getElementById('selectedServicesList');
+            
+            let totalPrice = 0;
+            let totalTime = 0;
+            
+            selectedIds.forEach(id => {
+                const service = services[id];
+                totalPrice += service.price;
+                totalTime += service.duration;
+                
+                const item = document.createElement('div');
+                item.className = 'summary-item';
+                item.innerHTML = `
+                    <span>${service.name}</span>
+                    <span>${service.price} • ${service.duration}min</span>
+                `;
+                container.appendChild(item);
+            });
+            
+            // Add total
+            const totalItem = document.createElement('div');
+            totalItem.className = 'summary-item';
+            totalItem.innerHTML = `
+                <span>Total:</span>
+                <span>${totalPrice} • ${totalTime}min</span>
+            `;
+            container.appendChild(totalItem);
+        }
+
+        // Set minimum date to today
+        window.onload = function() {
+            const dateInput = document.getElementById('appointmentDate');
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.min = today;
+            
+            loadSelectedServices();
+        };
+
+        // Load time slots
+        function loadTimeSlots() {
+            const selectedDate = document.getElementById('appointmentDate').value;
+            if (!selectedDate) return;
+            
+            const timeSlotSection = document.getElementById('timeSlotSection');
+            const container = document.getElementById('availableTimeSlots');
+            
+            timeSlotSection.style.display = 'block';
+            
+            // Sample time slots
+            const timeSlots = [
+                { time: '9:00 AM', available: true },
+                { time: '9:30 AM', available: true },
+                { time: '10:00 AM', available: false },
+                { time: '10:30 AM', available: true },
+                { time: '11:00 AM', available: true },
+                { time: '11:30 AM', available: false },
+                { time: '12:00 PM - 1:00 PM', available: true },
+                { time: '12:30 PM - 1:30 PM', available: true },
+                { time: '1:00 PM - 2:00 PM', available: true },
+                { time: '1:30 PM - 2:30 PM', available: false },
+                { time: '2:00 PM - 3:00 PM', available: true },
+                { time: '2:30 PM - 3:30 PM', available: true }
+            ];
+            
+            container.innerHTML = timeSlots.map(slot => `
+                <div class="time-slot ${slot.available ? '' : 'unavailable'}" 
+                     ${slot.available ? `onclick="selectTime('${slot.time}')"` : ''}>
+                    ${slot.time}
+                </div>
+            `).join('');
+        }
+
+        // Select time slot
+        function selectTime(time) {
+            // Save to localStorage
+            localStorage.setItem('selectedTime', time);
+            localStorage.setItem('selectedDate', document.getElementById('appointmentDate').value);
+            
+            // Redirect to confirmation page
+            window.location.href = 'confirm.html';
+        }
+    </script>
+</body>
+</html>
